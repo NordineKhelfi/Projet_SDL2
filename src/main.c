@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "..\biblio\SDLS.h"
 #include "..\biblio\net.h"
+#include <spaceship.h>
 
 int main(int argc, char** argv)
 {
@@ -14,8 +15,9 @@ int main(int argc, char** argv)
     SDL_Event event;
 // create window with a title
     SDLS_init("Hello World");
+    SDLS_eraseWithBackgroundColor(0,0,0);
 
-    SDLS_eraseWithBackgroundColor(255,255,255);
+    SDL_Delay(2000);
 
     SDL_Quit();
 

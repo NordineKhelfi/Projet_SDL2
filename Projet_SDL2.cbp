@@ -46,7 +46,11 @@
 		<Unit filename="biblio/SDLS.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/main.c">
+		<Unit filename="include/spaceship.h" />
+		<Unit filename="src/spaceship.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/test_spaceship.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
