@@ -6,20 +6,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "..\biblio\SDLS.h"
+//#include <spaceship.h>
 
-typedef struct spaceship {
 
-    //int test ;
+typedef struct enemy {
+
     int posX ;
     int posY ;
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
 
+} enemy;
 
-}spaceship;
-
-typedef struct bullet {
+typedef struct enemy_bullet {
 
     int isBullet;
     int flag;
@@ -28,13 +28,11 @@ typedef struct bullet {
     int posY;
     SDL_Texture * texture_bullet;
 
-} bullet;
+} enemy_bullet;
 
-void spaceship_init(spaceship*);
-void move_spaceship_right(spaceship*);
-void move_spaceship_left(spaceship*);
-void destroy_spaceship(spaceship*);
-void fire(spaceship*, bullet*);
-void init_bullet(bullet *);
-void load_spaceship(spaceship*, int);
-//void test(spaceship*);
+void init_enemy(enemy*);
+void init_enemy_bullet(enemy_bullet *);
+void move_enemy(enemy*);
+void destroy_enemy(enemy *);
+void enemy_fire(enemy *, enemy_bullet *, int);
+void load_enemy(enemy*, int);

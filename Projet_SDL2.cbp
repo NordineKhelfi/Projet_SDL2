@@ -46,11 +46,19 @@
 		<Unit filename="biblio/SDLS.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="include/enemy.h" />
+		<Unit filename="include/graphic.h" />
 		<Unit filename="include/spaceship.h" />
-		<Unit filename="src/spaceship.c">
+		<Unit filename="src/enemy.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="test/test_spaceship.c">
+		<Unit filename="src/graphic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/jeu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/spaceship.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

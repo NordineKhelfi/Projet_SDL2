@@ -1,3 +1,6 @@
+#define JEU
+#ifdef  JEU
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -8,18 +11,24 @@
 #include "..\biblio\SDLS.h"
 #include "..\biblio\net.h"
 #include <spaceship.h>
-//#define SPACESHIP
+#include <enemy.h>
 
-
-#ifdef SPACESHIP
 #define GOOD_FIGHTER 0
 #define SMALL_YELLOW_SPACESHIP 1
 #define VIPER_MARK 2
 #define REPUBLIC_WHITE_SHIP 3
 #define SMALL_BLUE_SPACESHIP 4
+#define SPACESHIP_ALIEN 5
+#define REPUCLIB_ATTACK_CRUISER 6
+
+#define ENEMY_FIRE_LEVEL_1 50
+#define ENEMY_FIRE_LEVEL_2 30
+#define ENEMY_FIRE_LEVEL_3 15
 
 //GLOBAL VARIABLES
     int gQuit=false;
+    int gState = 0;
+    int giEnemyFireLevel = ENEMY_FIRE_LEVEL_1;
 
 //this function is called each 100ms and send an event to the main...
 Uint32 my_callbackfunc(Uint32 interval, void *param)
@@ -38,6 +47,14 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     return(interval);
 }
 
+int isEnemyTouched(enemy * evil, bullet * bullet){
+
+
+    if( evil->isAlive && (bullet->posY <= 40) && ( (bullet->posX >= (evil->posX - 22)) && (bullet->posX <=  (evil->posX + 40)  ) ) )
+        return true;
+    else
+        return false;
+}
 
 int main(int argc, char** argv)
 {
@@ -56,6 +73,12 @@ int main(int argc, char** argv)
 
     struct bullet bullet;
     init_bullet(&bullet);
+
+    struct enemy_bullet en_bullet;
+    init_enemy_bullet(&en_bullet);
+
+    struct enemy evil;
+    init_enemy(&evil);
 
 
     Uint32 delay = 30; /* To round it down to the nearest 100 ms */
@@ -83,23 +106,23 @@ int main(int argc, char** argv)
                 break;
 
             case SDLK_UP:
-                load_spaceship(&Vaisseau, REPUBLIC_WHITE_SHIP);
+
                 break;
 
             case SDLK_DOWN:
-                load_spaceship(&Vaisseau, SMALL_YELLOW_SPACESHIP);
+
                 break;
 
             case SDLK_RIGHT:
-                load_spaceship(&Vaisseau, SMALL_BLUE_SPACESHIP);
+
                 break;
 
             case SDLK_LEFT:
-                load_spaceship(&Vaisseau, GOOD_FIGHTER);
+
                 break;
 
             case SDLK_m:
-                destroy_spaceship(&Vaisseau);
+
                 break;
 
             case SDLK_SPACE:
@@ -108,8 +131,52 @@ int main(int argc, char** argv)
 
             }
 
+
         case SDL_USEREVENT:
-            finalDisplay(&Vaisseau, &bullet);
+            move_enemy(&evil);
+
+                    switch(gState){
+
+                    case 0:
+                        if(isEnemyTouched(&evil, &bullet)){
+                            gState = 1;
+                            destroy_enemy(&evil);
+                        }
+                    break;
+
+                    case 1:
+                        if(youWin(&Vaisseau)){
+                            gState = 2;
+                            init_enemy(&evil);
+                            load_enemy(&evil, REPUCLIB_ATTACK_CRUISER);
+                            giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
+                            spaceship_init(&Vaisseau);
+                            SDL_Delay(2000);
+                        }
+                    break;
+
+                    case 2:
+                        if(isEnemyTouched(&evil, &bullet)){
+                            gState = 3;
+                            destroy_enemy(&evil);
+                        }
+                        break;
+
+                    case 3:
+                        if(youWin(&Vaisseau)){
+                            gState = 0;
+                            init_enemy(&evil);
+                            load_enemy(&evil, REPUBLIC_WHITE_SHIP);
+                            giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
+                            spaceship_init(&Vaisseau);
+                        }
+                        break;
+
+
+                    }
+            enemy_fire(&evil, &en_bullet, giEnemyFireLevel);
+            finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet);
+
             break;
 
         }
@@ -120,4 +187,4 @@ int main(int argc, char** argv)
 
     return 0;
 }
-#endif // SPACESHIP
+#endif // JEU
