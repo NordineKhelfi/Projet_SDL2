@@ -11,7 +11,7 @@
 #include <enemy.h>
 
 
-int youWin(spaceship * ship){
+int youWin(spaceship * ship, int *flag){
 
         TTF_Font * ttfFont= SDLS_loadFont("fonts\\arial.ttf",95);// load font in RAM, size 15
         SDL_Texture *texture_text2= SDLS_loadText(ttfFont,"YOU WIN !!!!", 255,255,255); // copy text to print (in white color) to texture
@@ -19,6 +19,7 @@ int youWin(spaceship * ship){
         SDLS_copyTexture(ship->texture_spaceship, ship->posX, ship->posY);
         SDLS_displayAll();
 
+        (*flag) = true;
         SDL_Delay(1500);
 
         int dY = 1;
@@ -31,13 +32,14 @@ int youWin(spaceship * ship){
         SDLS_copyTexture(texture_text2,50,50);
         SDLS_displayAll();
     }
+        (*flag) = false;
         //SDL_Delay(1000);
     return true;
 }
 
 
 
-void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet){
+void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet, int *flag){
 
     int iQuit = false;
 
@@ -102,6 +104,7 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
 
         SDL_Texture * texture_large_exp2 = SDLS_loadImage("images//large_exp2.png");
 
+        (*flag) = true;
         while( iQuit == false )
         {
             SDL_Rect destFire = {evil->posX, 20, 128, 128};
@@ -116,6 +119,7 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
             if(iFire >= 16)
                 iQuit = true;
         }
+        (*flag) = false;
 
     }
 

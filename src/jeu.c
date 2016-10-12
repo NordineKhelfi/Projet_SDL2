@@ -31,6 +31,7 @@
     int gQuit=false;
     int gState = 0;
     int giEnemyFireLevel = ENEMY_FIRE_LEVEL_1;
+    int gFlag = false;
 
 //this function is called each 100ms and send an event to the main...
 Uint32 my_callbackfunc(Uint32 interval, void *param)
@@ -45,7 +46,8 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     userevent.data2 = NULL;
     event.type = SDL_USEREVENT;
     event.user = userevent;
-    SDL_PushEvent(&event);
+    if(!gFlag)
+        SDL_PushEvent(&event);
     return(interval);
 }
 
@@ -64,6 +66,12 @@ int amItouched( spaceship *ship, enemy_bullet *bullet) {
         return true;
     else
         return false;
+}
+
+void wait(int laps){
+    gFlag = true;
+    SDL_Delay(laps);
+    gFlag = false;
 }
 
 int main(int argc, char** argv)
@@ -144,7 +152,7 @@ int main(int argc, char** argv)
 
         case SDL_USEREVENT:
             move_enemy(&evil);
-
+            printf("gFlag %d\n", gFlag);
                     switch(gState){
 
                     case 0:
@@ -160,14 +168,14 @@ int main(int argc, char** argv)
                     break;
 
                     case 1:
-                        if(youWin(&Vaisseau)){
+                        if(youWin(&Vaisseau, &gFlag)){
                             gState = 2;
                             init_enemy(&evil);
                             init_enemy_bullet(&en_bullet);
                             load_enemy(&evil, REPUCLIB_ATTACK_CRUISER);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
-                            SDL_Delay(2000);
+                            wait(1000);
                         }
                     break;
 
@@ -183,7 +191,7 @@ int main(int argc, char** argv)
                         break;
 
                     case 3:
-                        if(youWin(&Vaisseau)){
+                        if(youWin(&Vaisseau, &gFlag)){
                             gState = 0;
                             init_enemy(&evil);
                             init_enemy_bullet(&en_bullet);
@@ -198,7 +206,7 @@ int main(int argc, char** argv)
 
                     }
             enemy_fire(&evil, &en_bullet, giEnemyFireLevel);
-            finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet);
+            finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet, &gFlag);
 
             break;
 
