@@ -42,7 +42,7 @@ void spaceship_init(spaceship *vaisseau){
 
     //puts("SPACESHIP_INIT()");
     vaisseau->texture_spaceship = SDLS_loadImage("images//goodFighter.png");
-    vaisseau->posX = 0;
+    vaisseau->posX = (SDLS_getScreenWidth() / 2) - 70;
     vaisseau->posY = SDLS_getScreenHeight() - 160;
     vaisseau->speed = 10;
     vaisseau->isAlive = true;

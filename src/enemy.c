@@ -82,8 +82,8 @@ void destroy_enemy(enemy *ship){
 
 void enemy_fire(enemy *ship, enemy_bullet *bullet, int iFire_level){
 
-    if(fire_count == iFire_level){
-        fire_count = 0;
+
+    if( (fire_count++ % iFire_level) == 0 ){
         if(bullet->flag == true){
             bullet->texture_bullet = SDLS_loadImage("images//bullet.png");
             bullet->isBullet = true;
@@ -91,7 +91,6 @@ void enemy_fire(enemy *ship, enemy_bullet *bullet, int iFire_level){
             bullet->posY = 130;
         }
     }
-    fire_count++;
 
 }
 

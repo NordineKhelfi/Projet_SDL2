@@ -13,6 +13,8 @@
 #include <spaceship.h>
 #include <enemy.h>
 
+//#define CHEAT
+
 #define GOOD_FIGHTER 0
 #define SMALL_YELLOW_SPACESHIP 1
 #define VIPER_MARK 2
@@ -23,7 +25,7 @@
 
 #define ENEMY_FIRE_LEVEL_1 50
 #define ENEMY_FIRE_LEVEL_2 30
-#define ENEMY_FIRE_LEVEL_3 15
+#define ENEMY_FIRE_LEVEL_3 5
 
 //GLOBAL VARIABLES
     int gQuit=false;
@@ -47,10 +49,18 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     return(interval);
 }
 
-int isEnemyTouched(enemy * evil, bullet * bullet){
+int isEnemyTouched(enemy * evil, bullet * bullet, spaceship * ship){
 
 
-    if( evil->isAlive && (bullet->posY <= 40) && ( (bullet->posX >= (evil->posX - 22)) && (bullet->posX <=  (evil->posX + 40)  ) ) )
+    if( evil->isAlive && ship->isAlive && (bullet->posY <= 40) && ( (bullet->posX >= (evil->posX - 22)) && (bullet->posX <=  (evil->posX + 40)  ) ) )
+        return true;
+    else
+        return false;
+}
+
+int amItouched( spaceship *ship, enemy_bullet *bullet) {
+
+    if( ship->isAlive && (bullet->posY >= SDLS_getScreenHeight() - 150) && ( (bullet->posX >= (ship->posX - 22)) && (bullet->posX <=  (ship->posX + 75)  ) ) )
         return true;
     else
         return false;
@@ -138,16 +148,22 @@ int main(int argc, char** argv)
                     switch(gState){
 
                     case 0:
-                        if(isEnemyTouched(&evil, &bullet)){
+                        if(isEnemyTouched(&evil, &bullet, &Vaisseau)){
                             gState = 1;
                             destroy_enemy(&evil);
                         }
+                        #ifndef CHEAT
+                        if(amItouched(&Vaisseau, &en_bullet))
+                            destroy_spaceship(&Vaisseau);
+                        #endif // CHEAT
+
                     break;
 
                     case 1:
                         if(youWin(&Vaisseau)){
                             gState = 2;
                             init_enemy(&evil);
+                            init_enemy_bullet(&en_bullet);
                             load_enemy(&evil, REPUCLIB_ATTACK_CRUISER);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
@@ -156,19 +172,26 @@ int main(int argc, char** argv)
                     break;
 
                     case 2:
-                        if(isEnemyTouched(&evil, &bullet)){
+                        if(isEnemyTouched(&evil, &bullet, &Vaisseau)){
                             gState = 3;
                             destroy_enemy(&evil);
                         }
+                        #ifndef CHEAT
+                        if(amItouched(&Vaisseau, &en_bullet))
+                            destroy_spaceship(&Vaisseau);
+                        #endif // CHEAT
                         break;
 
                     case 3:
                         if(youWin(&Vaisseau)){
                             gState = 0;
                             init_enemy(&evil);
-                            load_enemy(&evil, REPUBLIC_WHITE_SHIP);
+                            init_enemy_bullet(&en_bullet);
+                            load_enemy(&evil, SMALL_BLUE_SPACESHIP);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
+                            bullet.speed = 20;
+                            Vaisseau.speed = 20;
                         }
                         break;
 
