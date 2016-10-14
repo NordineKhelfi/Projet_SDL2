@@ -30,9 +30,10 @@ typedef struct enemy_bullet {
 
 } enemy_bullet;
 
-void init_enemy(enemy*);
+void init_enemy(enemy*, int);
 void init_enemy_bullet(enemy_bullet *);
 void move_enemy(enemy*);
+void move_enemy2(enemy*);
 void destroy_enemy(enemy *);
 void enemy_fire(enemy *, enemy_bullet *, int);
 void load_enemy(enemy*, int);

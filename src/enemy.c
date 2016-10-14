@@ -37,14 +37,18 @@ typedef struct enemy_bullet {
 
 //GLOBAL VARIABLES
 int toggle = false;
+int toggle2 = false;
 int fire_count = 0;
 
 
-void init_enemy(enemy *evil){
+void init_enemy(enemy *evil, int enemy_level){
 
     evil->isAlive = true;
     evil->speed = 7;
-    evil->posX = 0;
+    if(enemy_level == 0)
+        evil->posX = 0;
+    else
+        evil->posX = SDLS_getScreenWidth() - 40;
     evil->posY = 0;
     evil->texture_spaceship = SDLS_loadImage("images//evilFighter.png");
 
@@ -69,6 +73,21 @@ void move_enemy(enemy * evil){
             toggle = true;
         if(evil->posX <= 0)
             toggle = false;
+    }
+
+}
+
+void move_enemy2(enemy * evil){
+    if(evil->isAlive){
+        if(toggle2 == false)
+            evil->posX += evil->speed;
+        else
+            evil->posX -= evil->speed;
+
+        if(evil->posX >= SDLS_getScreenWidth() - 130)
+            toggle2 = true;
+        if(evil->posX <= 0)
+            toggle2 = false;
     }
 
 }

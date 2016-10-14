@@ -10,5 +10,5 @@
 #include <spaceship.h>
 #include <enemy.h>
 
-void finalDisplay(spaceship*, bullet*, enemy*, enemy_bullet*, int*);
+void finalDisplay(spaceship*, bullet*, enemy*, enemy_bullet*, enemy*, enemy_bullet*, int*);
 int youWin(spaceship *, int*);

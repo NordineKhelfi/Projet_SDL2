@@ -39,7 +39,7 @@ int youWin(spaceship * ship, int *flag){
 
 
 
-void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet, int *flag){
+void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet, enemy *evil2, enemy_bullet *en_bullet2,  int *flag){
 
     int iQuit = false;
 
@@ -75,6 +75,8 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
         SDLS_copyTexture(ship->texture_spaceship, ship->posX, ship->posY);
         if(evil->isAlive)
             SDLS_copyTexture(evil->texture_spaceship, evil->posX, evil->posY);
+        if(evil2->isAlive)
+            SDLS_copyTexture(evil2->texture_spaceship, evil2->posX, evil2->posY);
 
         SDLS_displayAll();
     }
