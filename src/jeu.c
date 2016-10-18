@@ -13,7 +13,7 @@
 #include <spaceship.h>
 #include <enemy.h>
 
-#define CHEAT
+//#define CHEAT
 
 #define GOOD_FIGHTER 0
 #define SMALL_YELLOW_SPACESHIP 1
@@ -29,7 +29,7 @@
 
 //GLOBAL VARIABLES
     int gQuit=false;
-    int gState = 7;
+    int gState = 0;
     int giEnemyFireLevel = ENEMY_FIRE_LEVEL_1;
     int gFlag = false;
     int count = 0;
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 
         case SDL_USEREVENT:
             move_enemy(&evil);
-            move_enemy2(&evil2);
+            move_enemy(&evil2);
 
                     switch(gState){
 
@@ -265,12 +265,42 @@ int main(int argc, char** argv)
 
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
+                            bullet.speed = 20;
+                            Vaisseau.speed = 20;
                             wait(1000);
                         }
                         break;
 
                     case 8:
+                        if(isEnemyTouched(&evil, &bullet, &Vaisseau) && count >= 20)
+                            destroy_enemy(&evil);
+                        if(isEnemyTouched(&evil2, &bullet, &Vaisseau) && count >= 20)
+                            destroy_enemy(&evil2);
 
+                        if(!evil.isAlive){
+                            evil2.isAlive = false;
+                            gState = 9;
+                        }
+
+                        count++;
+                        #ifndef CHEAT
+                        if(amItouched(&Vaisseau, &en_bullet))
+                            destroy_spaceship(&Vaisseau);
+                        #endif // CHEAT
+                        break;
+
+                    case 9:
+                        if(youWin(&Vaisseau, &gFlag)){
+                            gState = 10;
+                            init_enemy(&evil, 0);
+                            init_enemy_bullet(&en_bullet);
+                            load_enemy(&evil, SMALL_BLUE_SPACESHIP);
+                            giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
+                            spaceship_init(&Vaisseau);
+                            bullet.speed = 20;
+                            Vaisseau.speed = 20;
+                            wait(1000);
+                        }
                         break;
 
 

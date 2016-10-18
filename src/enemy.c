@@ -21,6 +21,7 @@ typedef struct enemy {
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
+    int toggle;
 
 } enemy;
 
@@ -45,6 +46,7 @@ void init_enemy(enemy *evil, int enemy_level){
 
     evil->isAlive = true;
     evil->speed = 7;
+    evil->toggle = false;
     if(enemy_level == 0)
         evil->posX = 0;
     else
@@ -64,30 +66,15 @@ void init_enemy_bullet(enemy_bullet *bullet){
 
 void move_enemy(enemy * evil){
     if(evil->isAlive){
-        if(toggle == false)
+        if(evil->toggle == false)
             evil->posX += evil->speed;
         else
             evil->posX -= evil->speed;
 
         if(evil->posX >= SDLS_getScreenWidth() - 130)
-            toggle = true;
+            evil->toggle = true;
         if(evil->posX <= 0)
-            toggle = false;
-    }
-
-}
-
-void move_enemy2(enemy * evil){
-    if(evil->isAlive){
-        if(toggle2 == false)
-            evil->posX += evil->speed;
-        else
-            evil->posX -= evil->speed;
-
-        if(evil->posX >= SDLS_getScreenWidth() - 130)
-            toggle2 = true;
-        if(evil->posX <= 0)
-            toggle2 = false;
+            evil->toggle = false;
     }
 
 }
