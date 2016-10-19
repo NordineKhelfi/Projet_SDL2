@@ -72,6 +72,19 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
             }
         }
 
+        if(en_bullet2->isBullet){
+            en_bullet2->flag = false;
+            if(en_bullet2->posY <= SDLS_getScreenHeight()){
+                en_bullet2->posY += en_bullet2->speed;
+                SDLS_copyTexture(en_bullet2->texture_bullet, en_bullet2->posX, en_bullet2->posY);
+            }
+            else{
+                en_bullet2->isBullet = false;
+                en_bullet2->flag = true;
+                en_bullet2->posX = -50;
+            }
+        }
+
         SDLS_copyTexture(ship->texture_spaceship, ship->posX, ship->posY);
         if(evil->isAlive)
             SDLS_copyTexture(evil->texture_spaceship, evil->posX, evil->posY);

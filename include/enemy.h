@@ -24,6 +24,7 @@ typedef struct enemy_bullet {
 
     int isBullet;
     int flag;
+    int fire_count;
     int speed;
     int posX;
     int posY;

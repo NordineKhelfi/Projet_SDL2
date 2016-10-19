@@ -29,6 +29,7 @@ typedef struct enemy_bullet {
 
     int isBullet;
     int flag;
+    int fire_count;
     int speed;
     int posX;
     int posY;
@@ -59,6 +60,7 @@ void init_enemy(enemy *evil, int enemy_level){
 void init_enemy_bullet(enemy_bullet *bullet){
     bullet->flag = true;
     bullet->isBullet = false;
+    bullet->fire_count = 0;
     bullet->posX = -50;
     bullet->posY = -50;
     bullet->speed = 10;
@@ -88,15 +90,15 @@ void destroy_enemy(enemy *ship){
 
 void enemy_fire(enemy *ship, enemy_bullet *bullet, int iFire_level){
 
-
-    if( (fire_count++ % iFire_level) == 0 ){
-        if(bullet->flag == true){
-            bullet->texture_bullet = SDLS_loadImage("images//bullet.png");
-            bullet->isBullet = true;
-            bullet->posX = ship->posX + 32;
-            bullet->posY = 130;
+    if(ship->isAlive)
+        if( (bullet->fire_count++ % iFire_level) == 0 ){
+            if(bullet->flag == true){
+                bullet->texture_bullet = SDLS_loadImage("images//bullet.png");
+                bullet->isBullet = true;
+                bullet->posX = ship->posX + 32;
+                bullet->posY = 130;
+            }
         }
-    }
 
 }
 

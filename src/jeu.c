@@ -55,7 +55,7 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
 int isEnemyTouched(enemy * evil, bullet * bullet, spaceship * ship){
 
 
-    if( evil->isAlive && ship->isAlive && (bullet->posY <= 40) && ( (bullet->posX >= (evil->posX - 22)) && (bullet->posX <=  (evil->posX + 40)  ) ) )
+    if( evil->isAlive && ship->isAlive && (bullet->posY <= 40) && ( (bullet->posX >= (evil->posX - 22)) && (bullet->posX <=  (evil->posX + 50)  ) ) )
         return true;
     else
         return false;
@@ -260,8 +260,10 @@ int main(int argc, char** argv)
                             init_enemy(&evil2, 1);
                             init_enemy_bullet(&en_bullet2);
 
-                            en_bullet.speed = 15;
-                            en_bullet2.speed = 15;
+                            SDLS_changeColor(evil2.texture_spaceship, 180, 180, 180);
+
+                            en_bullet.speed =  5;
+                            en_bullet2.speed = 5;
 
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
@@ -294,6 +296,7 @@ int main(int argc, char** argv)
                             gState = 10;
                             init_enemy(&evil, 0);
                             init_enemy_bullet(&en_bullet);
+                            init_enemy_bullet(&en_bullet2);
                             load_enemy(&evil, SMALL_BLUE_SPACESHIP);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
@@ -307,6 +310,8 @@ int main(int argc, char** argv)
 
                     }
             enemy_fire(&evil, &en_bullet, giEnemyFireLevel);
+            enemy_fire(&evil2, &en_bullet2, giEnemyFireLevel);
+
             finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet, &evil2, &en_bullet2, &gFlag);
 
             break;
