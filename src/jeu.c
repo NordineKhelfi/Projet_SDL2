@@ -22,6 +22,8 @@
 #define SMALL_BLUE_SPACESHIP 4
 #define SPACESHIP_ALIEN 5
 #define REPUCLIB_ATTACK_CRUISER 6
+#define DISCOVERY 7
+#define ORANGE_SHIP 8
 
 #define ENEMY_FIRE_LEVEL_1 50
 #define ENEMY_FIRE_LEVEL_2 30
@@ -29,9 +31,11 @@
 
 //GLOBAL VARIABLES
     int gQuit=false;
-    int gState = 7;
+    int gState = 0;
     int giEnemyFireLevel = ENEMY_FIRE_LEVEL_1;
     int gShipLives = 0;
+    int gSuperShots = 0;
+    int isSuperShot = false;
     int gFlag = false;
     int count = 0;
 
@@ -137,6 +141,15 @@ int main(int argc, char** argv)
                 move_spaceship_right(&Vaisseau);
                 break;
 
+            case SDLK_b:
+                if(Vaisseau.superShot>0){
+                    super_fire(&Vaisseau, &bullet);
+                    isSuperShot = true;
+                    Vaisseau.superShot--;
+                    gSuperShots = Vaisseau.superShot;
+                }
+                break;
+
             case SDLK_UP:
 
                 break;
@@ -158,6 +171,7 @@ int main(int argc, char** argv)
                 break;
 
             case SDLK_SPACE:
+                isSuperShot = false;
                 fire(&Vaisseau, &bullet);
                 break;
 
@@ -176,6 +190,7 @@ int main(int argc, char** argv)
                             gState = 1;
                             destroy_enemy(&evil);
                             gShipLives = Vaisseau.lives;
+                            gSuperShots = Vaisseau.superShot;
                         }
                         #ifndef CHEAT
                         if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
@@ -200,6 +215,7 @@ int main(int argc, char** argv)
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
                             Vaisseau.lives = gShipLives;
+                            Vaisseau.superShot = gSuperShots;
                             wait(1000);
                         }
                         break;
@@ -209,6 +225,7 @@ int main(int argc, char** argv)
                             gState = 3;
                             destroy_enemy(&evil);
                             gShipLives = Vaisseau.lives;
+                            gSuperShots = Vaisseau.superShot;
                         }
                         #ifndef CHEAT
                         if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
@@ -230,6 +247,7 @@ int main(int argc, char** argv)
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
                             Vaisseau.lives = gShipLives;
+                            Vaisseau.superShot = gSuperShots;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
@@ -238,8 +256,17 @@ int main(int argc, char** argv)
 
                     case 4:
                         if(isEnemyTouched(&evil, &bullet, &Vaisseau)){
-                            gState = 5;
-                            SDLS_changeColor(evil.texture_spaceship, 200, 200, 200);
+                            if(isSuperShot){
+                                gState = 7;
+                                destroy_enemy(&evil);
+                                gShipLives = Vaisseau.lives;
+                                gSuperShots = Vaisseau.superShot;
+                            }
+                            else{
+                                gState = 5;
+                                SDLS_changeColor(evil.texture_spaceship, 200, 200, 200);
+                            }
+
                         }
 
                         #ifndef CHEAT
@@ -277,6 +304,7 @@ int main(int argc, char** argv)
                             gState = 7;
                             destroy_enemy(&evil);
                             gShipLives = Vaisseau.lives;
+                            gSuperShots = Vaisseau.superShot;
                         }
                         count++;
                         #ifndef CHEAT
@@ -307,6 +335,7 @@ int main(int argc, char** argv)
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
                             Vaisseau.lives = gShipLives;
+                            Vaisseau.superShot = gSuperShots;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
@@ -322,6 +351,7 @@ int main(int argc, char** argv)
                         if(!evil.isAlive){
                             evil2.isAlive = false;
                             gShipLives = Vaisseau.lives;
+                            gSuperShots = Vaisseau.superShot;
                             gState = 9;
                         }
 
@@ -359,6 +389,7 @@ int main(int argc, char** argv)
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
                             Vaisseau.lives = gShipLives;
+                            Vaisseau.superShot = gSuperShots;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
@@ -377,6 +408,7 @@ int main(int argc, char** argv)
                             evil2.isAlive = false;
                             evil3.isAlive = false;
                             gShipLives = Vaisseau.lives;
+                            Vaisseau.superShot = gSuperShots;
                             gState = 11;
                         }
 
@@ -390,6 +422,40 @@ int main(int argc, char** argv)
                         }
                         count++;
                         #endif // CHEAT
+
+                        break;
+
+                    case 11:
+                        if(youWin(&Vaisseau, &gFlag)){
+                            gState = 12;
+
+                            init_enemy(&evil, 0);
+                            init_enemy_bullet(&en_bullet);
+                            init_enemy_bullet(&en_bullet2);
+                            load_enemy(&evil, DISCOVERY);
+
+                            init_enemy(&evil2, 1);
+                            init_enemy_bullet(&en_bullet2);
+                            load_enemy(&evil2, DISCOVERY);
+
+                            init_enemy(&evil3, 2);
+                            load_enemy(&evil3, DISCOVERY);
+
+                            SDLS_changeColor(evil2.texture_spaceship, 150, 150, 150);
+                            SDLS_changeColor(evil3.texture_spaceship, 150, 150, 150);
+
+                            giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
+                            spaceship_init(&Vaisseau);
+                            Vaisseau.lives = gShipLives;
+                            Vaisseau.superShot = gSuperShots;
+                            bullet.speed = 20;
+                            Vaisseau.speed = 20;
+                            wait(1000);
+                        }
+
+                        break;
+
+                    case 12:
 
                         break;
 

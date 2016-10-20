@@ -13,6 +13,8 @@
 #define REPUBLIC_WHITE_SHIP 3
 #define SMALL_BLUE_SPACESHIP 4
 #define REPUCLIB_ATTACK_CRUISER 6
+#define DISCOVERY 7
+#define ORANGE_SHIP 8
 
 typedef struct spaceship {
 
@@ -23,6 +25,7 @@ typedef struct spaceship {
     SDL_Texture * texture_spaceship;
     int isAlive;
     int lives;
+    int superShot;
 
 
 }spaceship;
@@ -48,6 +51,7 @@ void spaceship_init(spaceship *vaisseau){
     vaisseau->speed = 10;
     vaisseau->isAlive = true;
     vaisseau->lives = 3;
+    vaisseau->superShot = 3;
 }
 
 
@@ -141,6 +145,17 @@ void fire(spaceship *ship, bullet *bullet){
 
 }
 
+void super_fire(spaceship *ship, bullet *bullet){
+
+    if(bullet->flag == true){
+        bullet->texture_bullet = SDLS_loadImage("images//green_bullet.png");
+        bullet->isBullet = true;
+        bullet->posX = ship->posX - 5;
+        bullet->posY = SDLS_getScreenHeight() - 150;
+    }
+
+}
+
 void load_spaceship(spaceship *ship, int choice){
 
     switch (choice){
@@ -162,6 +177,12 @@ void load_spaceship(spaceship *ship, int choice){
         break;
     case REPUCLIB_ATTACK_CRUISER:
         ship->texture_spaceship = SDLS_loadImage("images//republic_attack_cruiser.png");
+        break;
+    case DISCOVERY:
+        ship->texture_spaceship = SDLS_loadImage("images//discovery.png");
+        break;
+    case ORANGE_SHIP:
+        ship->texture_spaceship = SDLS_loadImage("images//ship.png");
         break;
 
     }

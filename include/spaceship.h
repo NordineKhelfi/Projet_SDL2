@@ -16,6 +16,7 @@ typedef struct spaceship {
     SDL_Texture * texture_spaceship;
     int isAlive;
     int lives;
+    int superShot;
 
 
 }spaceship;
@@ -36,6 +37,7 @@ void move_spaceship_right(spaceship*);
 void move_spaceship_left(spaceship*);
 void destroy_spaceship(spaceship*);
 void fire(spaceship*, bullet*);
+void super_fire(spaceship*, bullet*);
 void init_bullet(bullet *);
 void load_spaceship(spaceship*, int);
 //void test(spaceship*);

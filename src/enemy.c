@@ -13,6 +13,8 @@
 #define SMALL_BLUE_SPACESHIP 4
 #define SPACESHIP_ALIEN 5
 #define REPUCLIB_ATTACK_CRUISER 6
+#define DISCOVERY 7
+#define ORANGE_SHIP 8
 
 typedef struct enemy {
 
@@ -126,6 +128,12 @@ void load_enemy(enemy *ship, int choice){
         break;
     case REPUCLIB_ATTACK_CRUISER:
         ship->texture_spaceship = SDLS_loadImage("images//republic_attack_cruiser_enemy.png");
+        break;
+    case DISCOVERY:
+        ship->texture_spaceship = SDLS_loadImage("images//discovery.png");
+        break;
+    case ORANGE_SHIP:
+        ship->texture_spaceship = SDLS_loadImage("images//ship.png");
         break;
     }
 }

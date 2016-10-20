@@ -109,12 +109,19 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
         //DISPLAY LIVES NUMBER
         SDL_Texture *texture_Heart = SDLS_loadImage("images\\59_heart.png");
         TTF_Font * ttfFont= SDLS_loadFont("fonts\\arial.ttf",30);// load font in RAM, size 15
-        char cTab[10];
-        sprintf(cTab, "x%d", ship->lives);
-        SDL_Texture *texture_text2= SDLS_loadText(ttfFont, cTab, 255,255,255); // copy text to print (in white color) to texture
+        char cLives[3];
+        sprintf(cLives, "x%d", ship->lives);
+        SDL_Texture *texture_text_lives= SDLS_loadText(ttfFont, cLives, 255,255,255); // copy text to print (in white color) to texture
         SDLS_copyTexture(texture_Heart, SDLS_getScreenWidth() - 100, SDLS_getScreenHeight() - 45);
-        SDLS_copyTexture(texture_text2,SDLS_getScreenWidth() - 65, SDLS_getScreenHeight() - 45); // copy texture to window on position 200,100
+        SDLS_copyTexture(texture_text_lives,SDLS_getScreenWidth() - 65, SDLS_getScreenHeight() - 45); // copy texture to window on position 200,100
 
+        //DISPLAY SUPERFIRE NUMBER
+        SDL_Texture *texture_super_fire = SDLS_loadImage("images\\green_bullet_mini.png");
+        char cSuper_shots[3];
+        sprintf(cSuper_shots, "x%d", ship->superShot);
+        SDL_Texture *texture_text_shots= SDLS_loadText(ttfFont, cSuper_shots, 255,255,255); // copy text to print (in white color) to texture
+        SDLS_copyTexture(texture_text_shots,SDLS_getScreenWidth() - 65, SDLS_getScreenHeight() - 80);
+        SDLS_copyTexture(texture_super_fire, SDLS_getScreenWidth() - 115, SDLS_getScreenHeight() - 80);
         SDLS_displayAll();
     }
 
