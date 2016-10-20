@@ -29,8 +29,9 @@
 
 //GLOBAL VARIABLES
     int gQuit=false;
-    int gState = 0;
+    int gState = 7;
     int giEnemyFireLevel = ENEMY_FIRE_LEVEL_1;
+    int gShipLives = 0;
     int gFlag = false;
     int count = 0;
 
@@ -105,6 +106,12 @@ int main(int argc, char** argv)
     struct enemy_bullet en_bullet2;
     init_bullet(&en_bullet2);
 
+    struct enemy evil3;
+    evil3.isAlive = false;
+
+    struct enemy_bullet en_bullet3;
+    init_enemy_bullet(&en_bullet3);
+
 
     Uint32 delay = 30; /* To round it down to the nearest 100 ms */
     SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, NULL); //init timer
@@ -160,6 +167,7 @@ int main(int argc, char** argv)
         case SDL_USEREVENT:
             move_enemy(&evil);
             move_enemy(&evil2);
+            move_enemy(&evil3);
 
                     switch(gState){
 
@@ -167,10 +175,17 @@ int main(int argc, char** argv)
                         if(isEnemyTouched(&evil, &bullet, &Vaisseau)){
                             gState = 1;
                             destroy_enemy(&evil);
+                            gShipLives = Vaisseau.lives;
                         }
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
+
                         #endif // CHEAT
 
                         break;
@@ -184,6 +199,7 @@ int main(int argc, char** argv)
                             load_enemy(&evil, REPUCLIB_ATTACK_CRUISER);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
+                            Vaisseau.lives = gShipLives;
                             wait(1000);
                         }
                         break;
@@ -192,10 +208,16 @@ int main(int argc, char** argv)
                         if(isEnemyTouched(&evil, &bullet, &Vaisseau)){
                             gState = 3;
                             destroy_enemy(&evil);
+                            gShipLives = Vaisseau.lives;
                         }
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
                         #endif // CHEAT
                         break;
 
@@ -207,6 +229,7 @@ int main(int argc, char** argv)
                             load_enemy(&evil, SMALL_BLUE_SPACESHIP);
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
+                            Vaisseau.lives = gShipLives;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
@@ -220,8 +243,13 @@ int main(int argc, char** argv)
                         }
 
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                       if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
                         #endif // CHEAT
                         break;
 
@@ -234,8 +262,13 @@ int main(int argc, char** argv)
                         }
                         count++;
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
                         #endif // CHEAT
                         break;
 
@@ -243,11 +276,17 @@ int main(int argc, char** argv)
                         if(isEnemyTouched(&evil, &bullet, &Vaisseau) && count >= 20){
                             gState = 7;
                             destroy_enemy(&evil);
+                            gShipLives = Vaisseau.lives;
                         }
                         count++;
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
                         #endif // CHEAT
                         break;
 
@@ -267,6 +306,7 @@ int main(int argc, char** argv)
 
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
                             spaceship_init(&Vaisseau);
+                            Vaisseau.lives = gShipLives;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
@@ -281,29 +321,76 @@ int main(int argc, char** argv)
 
                         if(!evil.isAlive){
                             evil2.isAlive = false;
+                            gShipLives = Vaisseau.lives;
                             gState = 9;
                         }
 
                         count++;
                         #ifndef CHEAT
-                        if(amItouched(&Vaisseau, &en_bullet))
-                            destroy_spaceship(&Vaisseau);
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
                         #endif // CHEAT
                         break;
 
                     case 9:
                         if(youWin(&Vaisseau, &gFlag)){
                             gState = 10;
+
                             init_enemy(&evil, 0);
                             init_enemy_bullet(&en_bullet);
                             init_enemy_bullet(&en_bullet2);
                             load_enemy(&evil, SMALL_BLUE_SPACESHIP);
+
+                            init_enemy(&evil2, 1);
+                            init_enemy_bullet(&en_bullet2);
+                            load_enemy(&evil2, SMALL_BLUE_SPACESHIP);
+
+                            init_enemy(&evil3, 2);
+                            load_enemy(&evil3, SMALL_BLUE_SPACESHIP);
+
+                            SDLS_changeColor(evil2.texture_spaceship, 150, 150, 150);
+                            SDLS_changeColor(evil3.texture_spaceship, 150, 150, 150);
+
                             giEnemyFireLevel = ENEMY_FIRE_LEVEL_3;
                             spaceship_init(&Vaisseau);
+                            Vaisseau.lives = gShipLives;
                             bullet.speed = 20;
                             Vaisseau.speed = 20;
                             wait(1000);
                         }
+                        break;
+
+                    case 10:
+                        if(isEnemyTouched(&evil, &bullet, &Vaisseau) && count >= 20)
+                            destroy_enemy(&evil);
+                        if(isEnemyTouched(&evil2, &bullet, &Vaisseau) && count >= 20)
+                            destroy_enemy(&evil2);
+                        if(isEnemyTouched(&evil3, &bullet, &Vaisseau) && count >= 20)
+                            destroy_enemy(&evil3);
+
+                        if(!evil.isAlive){
+                            evil2.isAlive = false;
+                            evil3.isAlive = false;
+                            gShipLives = Vaisseau.lives;
+                            gState = 11;
+                        }
+
+                        count++;
+                        #ifndef CHEAT
+                        if(amItouched(&Vaisseau, &en_bullet) && count >= 20){
+                            count = 0;
+                            Vaisseau.lives--;
+                            if(Vaisseau.lives == 0)
+                                destroy_spaceship(&Vaisseau);
+                        }
+                        count++;
+                        #endif // CHEAT
+
                         break;
 
 
@@ -311,8 +398,9 @@ int main(int argc, char** argv)
                     }
             enemy_fire(&evil, &en_bullet, giEnemyFireLevel);
             enemy_fire(&evil2, &en_bullet2, giEnemyFireLevel);
+            enemy_fire(&evil3, &en_bullet3, giEnemyFireLevel);
 
-            finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet, &evil2, &en_bullet2, &gFlag);
+            finalDisplay(&Vaisseau, &bullet, &evil, &en_bullet, &evil2, &en_bullet2, &evil3, &en_bullet3, &gFlag);
 
             break;
 

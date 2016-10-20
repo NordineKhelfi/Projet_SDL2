@@ -39,7 +39,7 @@ int youWin(spaceship * ship, int *flag){
 
 
 
-void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet, enemy *evil2, enemy_bullet *en_bullet2,  int *flag){
+void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet *en_bullet, enemy *evil2, enemy_bullet *en_bullet2, enemy *evil3, enemy_bullet *en_bullet3, int *flag){
 
     int iQuit = false;
 
@@ -85,11 +85,35 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
             }
         }
 
+        if(en_bullet3->isBullet){
+            en_bullet3->flag = false;
+            if(en_bullet3->posY <= SDLS_getScreenHeight()){
+                en_bullet3->posY += en_bullet3->speed;
+                SDLS_copyTexture(en_bullet3->texture_bullet, en_bullet3->posX, en_bullet3->posY);
+            }
+            else{
+                en_bullet3->isBullet = false;
+                en_bullet3->flag = true;
+                en_bullet3->posX = -50;
+            }
+        }
+
         SDLS_copyTexture(ship->texture_spaceship, ship->posX, ship->posY);
         if(evil->isAlive)
             SDLS_copyTexture(evil->texture_spaceship, evil->posX, evil->posY);
         if(evil2->isAlive)
             SDLS_copyTexture(evil2->texture_spaceship, evil2->posX, evil2->posY);
+        if(evil3->isAlive)
+            SDLS_copyTexture(evil3->texture_spaceship, evil3->posX, evil3->posY);
+
+        //DISPLAY LIVES NUMBER
+        SDL_Texture *texture_Heart = SDLS_loadImage("images\\59_heart.png");
+        TTF_Font * ttfFont= SDLS_loadFont("fonts\\arial.ttf",30);// load font in RAM, size 15
+        char cTab[10];
+        sprintf(cTab, "x%d", ship->lives);
+        SDL_Texture *texture_text2= SDLS_loadText(ttfFont, cTab, 255,255,255); // copy text to print (in white color) to texture
+        SDLS_copyTexture(texture_Heart, SDLS_getScreenWidth() - 100, SDLS_getScreenHeight() - 45);
+        SDLS_copyTexture(texture_text2,SDLS_getScreenWidth() - 65, SDLS_getScreenHeight() - 45); // copy texture to window on position 200,100
 
         SDLS_displayAll();
     }

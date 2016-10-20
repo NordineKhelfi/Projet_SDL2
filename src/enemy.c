@@ -50,8 +50,10 @@ void init_enemy(enemy *evil, int enemy_level){
     evil->toggle = false;
     if(enemy_level == 0)
         evil->posX = 0;
-    else
+    if(enemy_level == 1)
         evil->posX = SDLS_getScreenWidth() - 40;
+    if(enemy_level == 2)
+        evil->posX = SDLS_getScreenWidth() / 2;
     evil->posY = 0;
     evil->texture_spaceship = SDLS_loadImage("images//evilFighter.png");
 

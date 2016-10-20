@@ -22,6 +22,7 @@ typedef struct spaceship {
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
+    int lives;
 
 
 }spaceship;
@@ -46,6 +47,7 @@ void spaceship_init(spaceship *vaisseau){
     vaisseau->posY = SDLS_getScreenHeight() - 160;
     vaisseau->speed = 10;
     vaisseau->isAlive = true;
+    vaisseau->lives = 3;
 }
 
 

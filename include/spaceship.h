@@ -15,6 +15,7 @@ typedef struct spaceship {
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
+    int lives;
 
 
 }spaceship;
