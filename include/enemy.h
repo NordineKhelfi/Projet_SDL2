@@ -16,6 +16,7 @@ typedef struct enemy {
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
+    int lives;
     int toggle;
 
 } enemy;

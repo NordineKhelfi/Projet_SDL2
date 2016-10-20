@@ -45,7 +45,7 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
 
     if(ship->isAlive){
         SDLS_eraseWithBackgroundColor(0,0,0);
-
+        //MOVING SHIP BULLET
         if(bullet->isBullet){
             bullet->flag = false;
             if(bullet->posY >=0){
@@ -58,7 +58,7 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
                 bullet->posX = -50;
             }
         }
-
+        //MOVING ENEMY BULLET
         if(en_bullet->isBullet){
             en_bullet->flag = false;
             if(en_bullet->posY <= SDLS_getScreenHeight()){
@@ -106,6 +106,24 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
         if(evil3->isAlive)
             SDLS_copyTexture(evil3->texture_spaceship, evil3->posX, evil3->posY);
 
+        //DISPLAY BOSS HEALTH
+        if(evil->lives >0){
+            SDL_Rect spriteBossHealth[5] =
+            {
+                {816, 0  , 204, 30 },
+                {612, 0  , 204, 30 },
+                {408, 0  , 204, 30 },
+                {204, 0  , 204, 30 },
+                {  0, 0  , 204, 30 }
+            };
+
+            SDL_Texture * texture_health_bar = SDLS_loadImage("images//Gradient_Health_Bar.png");
+            SDL_Rect destHealthBar = {evil->posX + 90, 20, 204, 30};
+            SDLS_copyTextureEx(texture_health_bar, spriteBossHealth[evil->lives], destHealthBar);
+
+
+        }
+
         //DISPLAY LIVES NUMBER
         SDL_Texture *texture_Heart = SDLS_loadImage("images\\59_heart.png");
         TTF_Font * ttfFont= SDLS_loadFont("fonts\\arial.ttf",30);// load font in RAM, size 15
@@ -125,6 +143,7 @@ void finalDisplay(spaceship * ship, bullet * bullet, enemy * evil, enemy_bullet 
         SDLS_displayAll();
     }
 
+    //ENEMY'S EXPLOSION
     if(!evil->isAlive){
         ship->isAlive = false;
         int iFire = 0;

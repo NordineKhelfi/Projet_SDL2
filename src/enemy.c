@@ -23,6 +23,7 @@ typedef struct enemy {
     int speed;
     SDL_Texture * texture_spaceship;
     int isAlive;
+    int lives;
     int toggle;
 
 } enemy;
@@ -48,6 +49,7 @@ int fire_count = 0;
 void init_enemy(enemy *evil, int enemy_level){
 
     evil->isAlive = true;
+    evil->lives = 0;
     evil->speed = 7;
     evil->toggle = false;
     if(enemy_level == 0)
