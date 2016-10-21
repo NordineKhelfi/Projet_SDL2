@@ -200,7 +200,7 @@ int main(int argc, char** argv)
                     gShipLives = Vaisseau.lives;
                     gSuperShots = Vaisseau.superShot;
                 }
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -209,8 +209,7 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-
-#endif // CHEAT
+                #endif // CHEAT
 
                 break;
 
@@ -238,7 +237,7 @@ int main(int argc, char** argv)
                     gShipLives = Vaisseau.lives;
                     gSuperShots = Vaisseau.superShot;
                 }
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -247,7 +246,7 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-#endif // CHEAT
+                #endif // CHEAT
                 break;
 
             case 3:
@@ -286,7 +285,7 @@ int main(int argc, char** argv)
 
                 }
 
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -295,13 +294,14 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-#endif // CHEAT
+                #endif // CHEAT
                 break;
 
 
             case 5:
                 if(isEnemyTouched(&evil, &bullet, &Vaisseau) && count >= 20)
                 {
+                    count = 0;
                     if(isSuperShot)
                     {
                         gState = 7;
@@ -313,12 +313,11 @@ int main(int argc, char** argv)
                     {
                         gState = 6;
                         SDLS_changeColor(evil.texture_spaceship, 127, 127, 127);
-                        count = 0;
                     }
 
                 }
-                count++;
-#ifndef CHEAT
+
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -326,20 +325,20 @@ int main(int argc, char** argv)
                     if(Vaisseau.lives == 0)
                         destroy_spaceship(&Vaisseau);
                 }
+                #endif // CHEAT
                 count++;
-#endif // CHEAT
                 break;
 
             case 6:
                 if(isEnemyTouched(&evil, &bullet, &Vaisseau) && count >= 20)
                 {
+                    count = 0;
                     gState = 7;
                     destroy_enemy(&evil);
                     gShipLives = Vaisseau.lives;
                     gSuperShots = Vaisseau.superShot;
                 }
-                count++;
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -347,8 +346,8 @@ int main(int argc, char** argv)
                     if(Vaisseau.lives == 0)
                         destroy_spaceship(&Vaisseau);
                 }
+                #endif // CHEAT
                 count++;
-#endif // CHEAT
                 break;
 
             case 7:
@@ -391,7 +390,7 @@ int main(int argc, char** argv)
                 }
 
                 count++;
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -400,7 +399,7 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-#endif // CHEAT
+                #endif // CHEAT
                 break;
 
             case 9:
@@ -451,7 +450,7 @@ int main(int argc, char** argv)
                 }
 
                 count++;
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -460,7 +459,7 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-#endif // CHEAT
+                #endif // CHEAT
 
                 break;
 
@@ -514,7 +513,7 @@ int main(int argc, char** argv)
 
                 }
 
-#ifndef CHEAT
+                #ifndef CHEAT
                 if(amItouched(&Vaisseau, &en_bullet) && count >= 20)
                 {
                     count = 0;
@@ -523,28 +522,17 @@ int main(int argc, char** argv)
                         destroy_spaceship(&Vaisseau);
                 }
                 count++;
-#endif // CHEAT
+                #endif // CHEAT
 
                 break;
 
             case 13:
                 if(youWin(&Vaisseau, &gFlag))
                 {
-                    gState = 14;
-                    init_enemy(&evil, 0);
-                    init_enemy_bullet(&en_bullet);
-                    en_bullet.speed = 15;
-                    load_enemy(&evil, REPUCLIB_ATTACK_CRUISER);
-                    giEnemyFireLevel = ENEMY_FIRE_LEVEL_2;
-                    spaceship_init(&Vaisseau);
-                    Vaisseau.lives = gShipLives;
-                    Vaisseau.superShot = gSuperShots;
-                    wait(1000);
+                    puts("Congratulations !!!");
+                    gQuit = true;
+                    SDL_Quit();
                 }
-                break;
-
-            case 14:
-
                 break;
 
 
